@@ -1,7 +1,7 @@
 package com.hoya.ddory.coconut.cloud
 
 import com.hoya.ddory.coconut.cloud.response.TickerPublic
-import retrofit2.Response
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -10,5 +10,5 @@ interface PublicApiInterface {
     fun getTicker(
         @Path("orderCurrency") orderCurrency: String,
         @Path("paymentCurrency") paymentCurrency: String
-    ) : Response<TickerPublic>
+    ) : Single<TickerPublic>
 }
