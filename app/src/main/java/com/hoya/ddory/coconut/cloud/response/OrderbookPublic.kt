@@ -16,7 +16,7 @@ data class OrderbookPublicData(
 )
 
 data class Transaction(
-    @SerializedName("quantitiy") val quantity: String,
+    @SerializedName("quantity") val quantity: String,
     @SerializedName("price") val price: String
 )
 
