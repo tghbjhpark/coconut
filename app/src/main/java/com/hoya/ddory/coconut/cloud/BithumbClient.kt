@@ -14,4 +14,6 @@ object BithumbClient {
             .build()
 
     fun getPublicService() = retrofit.create(PublicApiInterface::class.java)
+
+    fun getPrivateService() = retrofit.create(PrivateApiInfoInterface::class.java)
 }
