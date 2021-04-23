@@ -1,6 +1,7 @@
 package com.hoya.ddory.coconut.cloud
 
 import com.hoya.ddory.coconut.cloud.response.Account
+import com.hoya.ddory.coconut.cloud.response.Balance
 import io.reactivex.Single
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -14,4 +15,11 @@ interface PrivateApiInfoInterface {
         @HeaderMap headers: HashMap<String, String>,
         @FieldMap param: HashMap<String, String>
     ): Single<Account>
+
+    @FormUrlEncoded
+    @POST("/info/balance")
+    fun getBalance(
+        @HeaderMap headers: HashMap<String, String>,
+        @FieldMap param: HashMap<String, String>
+    ): Single<Balance>
 }
