@@ -2,7 +2,8 @@ package com.hoya.ddory.coconut.model
 
 import android.util.Base64
 import com.hoya.ddory.coconut.cloud.BithumbClient
-import io.reactivex.Completable
+import com.hoya.ddory.coconut.cloud.response.Account
+import io.reactivex.Single
 import org.apache.commons.codec.binary.Hex
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -11,7 +12,7 @@ class BithumbModel(
     private val apiKey: String,
     private val apiSecret: String
 ) {
-    fun getAccount(orderCurrency: String): Completable {
+    fun getAccount(orderCurrency: String): Single<Account> {
         val params = hashMapOf(
             Pair("endpoint", INFO_ACCOUNT_URL),
             Pair("order_currency", orderCurrency)
@@ -19,7 +20,6 @@ class BithumbModel(
         val header = makeHeader(INFO_ACCOUNT_URL, params)
         return BithumbClient.getPrivateService()
             .getAccount(header, params)
-            .ignoreElement()
     }
 
     private fun makeHeader(url: String, param: HashMap<String, String>): HashMap<String, String> {

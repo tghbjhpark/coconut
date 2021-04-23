@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Account(
     @SerializedName("status") val status: String,
-    @SerializedName("data") val data: String
+    @SerializedName("data") val data: AccountData
 )
 
 data class AccountData(
