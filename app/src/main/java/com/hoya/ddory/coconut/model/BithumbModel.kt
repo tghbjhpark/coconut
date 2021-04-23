@@ -4,6 +4,7 @@ import android.util.Base64
 import com.hoya.ddory.coconut.cloud.BithumbClient
 import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.Balance
+import com.hoya.ddory.coconut.cloud.response.Orders
 import io.reactivex.Single
 import org.apache.commons.codec.binary.Hex
 import javax.crypto.Mac
@@ -31,6 +32,23 @@ class BithumbModel(
         val header = makeHeader(INFO_BALANCE_URL, params)
         return BithumbClient.getPrivateService()
             .getBalance(header, params)
+    }
+
+    fun getOrders(id: String? = null, type: String? = null, orderCurrency: String): Single<Orders> {
+        val params = hashMapOf(
+            Pair("endpoint", INFO_ORDERS_URL),
+            Pair("order_currency", orderCurrency)
+        ).apply {
+            id?.let {
+                put("order_id", it)
+            }
+            type?.let {
+                put("type", it)
+            }
+        }
+        val header = makeHeader(INFO_ORDERS_URL, params)
+        return BithumbClient.getPrivateService()
+            .getOrders(header, params)
     }
 
     private fun makeHeader(url: String, param: HashMap<String, String>): HashMap<String, String> {
@@ -73,5 +91,6 @@ class BithumbModel(
 
         private const val INFO_ACCOUNT_URL = "/info/account"
         private const val INFO_BALANCE_URL = "/info/balance"
+        private const val INFO_ORDERS_URL = "/info/orders"
     }
 }
