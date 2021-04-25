@@ -5,6 +5,7 @@ import com.hoya.ddory.coconut.cloud.BithumbClient
 import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.Balance
 import com.hoya.ddory.coconut.cloud.response.Orders
+import com.hoya.ddory.coconut.cloud.response.Trade
 import io.reactivex.Single
 import org.apache.commons.codec.binary.Hex
 import javax.crypto.Mac
@@ -51,6 +52,30 @@ class BithumbModel(
             .getOrders(header, params)
     }
 
+    fun buy(orderCurrency: String, units: Float): Single<Trade> {
+        val params = hashMapOf(
+            Pair("endpoint", TRADE_BUY_URL),
+            Pair("units", units.toString()),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", "KRW")
+        )
+        val header = makeHeader(TRADE_BUY_URL, params)
+        return BithumbClient.getTradeService()
+            .buyMarketPrice(header, params)
+    }
+
+    fun sell(orderCurrency: String, units: Float): Single<Trade> {
+        val params = hashMapOf(
+            Pair("endpoint", TRADE_SELL_URL),
+            Pair("units", units.toString()),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", "KRW")
+        )
+        val header = makeHeader(TRADE_SELL_URL, params)
+        return BithumbClient.getTradeService()
+            .sellMarketPrice(header, params)
+    }
+
     private fun makeHeader(url: String, param: HashMap<String, String>): HashMap<String, String> {
         val nonce = System.currentTimeMillis().toString()
 
@@ -92,5 +117,8 @@ class BithumbModel(
         private const val INFO_ACCOUNT_URL = "/info/account"
         private const val INFO_BALANCE_URL = "/info/balance"
         private const val INFO_ORDERS_URL = "/info/orders"
+
+        private const val TRADE_BUY_URL = "/trade/market_buy"
+        private const val TRADE_SELL_URL = "/trade/market_sell"
     }
 }
