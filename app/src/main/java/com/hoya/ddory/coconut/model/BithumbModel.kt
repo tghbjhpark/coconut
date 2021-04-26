@@ -35,18 +35,13 @@ class BithumbModel(
             .getBalance(header, params)
     }
 
-    fun getOrders(id: String? = null, type: String? = null, orderCurrency: String): Single<Orders> {
+    fun getOrders(id: String, orderCurrency: String, paymentCurrency: String = "KRW"): Single<Orders> {
         val params = hashMapOf(
             Pair("endpoint", INFO_ORDERS_URL),
-            Pair("order_currency", orderCurrency)
-        ).apply {
-            id?.let {
-                put("order_id", it)
-            }
-            type?.let {
-                put("type", it)
-            }
-        }
+            Pair("order_id", id),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", paymentCurrency)
+        )
         val header = makeHeader(INFO_ORDERS_URL, params)
         return BithumbClient.getPrivateService()
             .getOrders(header, params)
@@ -116,7 +111,7 @@ class BithumbModel(
 
         private const val INFO_ACCOUNT_URL = "/info/account"
         private const val INFO_BALANCE_URL = "/info/balance"
-        private const val INFO_ORDERS_URL = "/info/orders"
+        private const val INFO_ORDERS_URL = "/info/order_detail"
 
         private const val TRADE_BUY_URL = "/trade/market_buy"
         private const val TRADE_SELL_URL = "/trade/market_sell"
