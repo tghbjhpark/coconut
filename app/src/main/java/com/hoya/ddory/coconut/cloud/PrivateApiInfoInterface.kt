@@ -25,7 +25,7 @@ interface PrivateApiInfoInterface {
     ): Single<Balance>
 
     @FormUrlEncoded
-    @POST("/info/orders")
+    @POST("/info/order_detail")
     fun getOrders(
         @HeaderMap headers: HashMap<String, String>,
         @FieldMap param: HashMap<String, String>
