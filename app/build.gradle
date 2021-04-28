@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -56,4 +58,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    // Room components
+    implementation "android.arch.persistence.room:runtime:2.2.5"
+    implementation "androidx.room:room-ktx:2.3.0"
+    implementation "androidx.room:room-rxjava2:2.3.0"
+    kapt "androidx.room:room-compiler:2.3.0"
+    annotationProcessor "androidx.room:room-compiler:2.3.0"
 }
