@@ -47,6 +47,13 @@
                 android:layout_weight="1"
                 android:text="@{viewModel.xrp}"/>
         </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@android:drawable/ic_input_add"
+            android:onClick="@{() -> viewModel.addAccount()}"/>
     </LinearLayout>
 
 </layout>

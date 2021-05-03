@@ -52,6 +52,10 @@ class AccountViewModel : ViewModel() {
 
     }
 
+    fun addAccount() {
+        Log.i(TAG, "addAccount")
+    }
+
     companion object {
         private const val TAG = "[coconut]AccountViewModel"
     }
