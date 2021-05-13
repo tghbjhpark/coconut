@@ -19,6 +19,12 @@ class AccountViewModel : ViewModel() {
     val xrp: LiveData<String>
         get() = _xrp
 
+    private val _addAccountEvent: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+    val addAccountEvent: LiveData<Boolean>
+        get() = _addAccountEvent
+
     fun onResume(context: Context) {
         val assetmanager = context.resources.assets
         var inputStream: InputStream
@@ -54,6 +60,7 @@ class AccountViewModel : ViewModel() {
 
     fun addAccount() {
         Log.i(TAG, "addAccount")
+        _addAccountEvent.postValue(true)
     }
 
     companion object {
