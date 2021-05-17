@@ -4,12 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.hoya.ddory.coconut.R
 import com.hoya.ddory.coconut.databinding.FragmentAddaccountBinding
+import kotlinx.android.synthetic.main.fragment_addaccount.*
 
 class AddAccountFragment : Fragment() {
 
     private lateinit var viewDataBinding: FragmentAddaccountBinding
+
+    @LayoutRes
+    fun getAdapterItemLayout(): Int {
+        return R.layout.add_account_dropdown_popup_item
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -28,6 +37,17 @@ class AddAccountFragment : Fragment() {
         ).apply {
             viewModel = AddAccountViewModel()
         }
+
         return viewDataBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val adapter: ArrayAdapter<CharSequence> = ArrayAdapter(
+            requireContext(),
+            getAdapterItemLayout(),
+            resources.getStringArray(R.array.target_currency)
+        )
+        outlined_exposed_dropdown.setAdapter(adapter)
     }
 }
