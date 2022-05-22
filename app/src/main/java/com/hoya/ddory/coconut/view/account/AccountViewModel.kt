@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hoya.ddory.coconut.model.BithumbModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import java.io.InputStream
 
 class AccountViewModel : ViewModel() {
@@ -26,6 +26,7 @@ class AccountViewModel : ViewModel() {
         get() = _addAccountEvent
 
     fun onResume(context: Context) {
+        Log.i("JONGHO", "onResume")
         val assetmanager = context.resources.assets
         var inputStream: InputStream
         val key = ByteArray(32)
@@ -38,20 +39,18 @@ class AccountViewModel : ViewModel() {
         inputStream = assetmanager.open("api_secret")
         inputStream.read(secret)
         inputStream.close()
-        BithumbModel(String(key), String(secret))
-            .getBalance()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    Log.i(TAG, "krw:${it.data.krw},xrp:${it.data.xrp}")
-                    _krw.value = it.data.krw
-                    _xrp.value = it.data.xrp
-                },
-                {
-
+        viewModelScope.launch {
+            kotlin.runCatching {
+                BithumbModel(String(key), String(secret))
+                    .getAccountKtor("BTC")
+            }
+                .onSuccess {
+                    Log.i(TAG, "onSuccess")
                 }
-            )
+                .onFailure {
+                    Log.i(TAG, "onFilure")
+                }
+        }
     }
 
     fun onPause() {
