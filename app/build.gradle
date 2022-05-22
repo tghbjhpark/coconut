@@ -51,16 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // rxjava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-
-    // retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
-
     // Room components
     implementation "android.arch.persistence.room:runtime:2.2.5"
     implementation "androidx.room:room-ktx:2.3.0"
