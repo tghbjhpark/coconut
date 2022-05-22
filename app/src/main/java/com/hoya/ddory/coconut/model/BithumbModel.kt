@@ -6,6 +6,9 @@ import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.Balance
 import com.hoya.ddory.coconut.cloud.response.Orders
 import com.hoya.ddory.coconut.cloud.response.Trade
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 import io.reactivex.Single
 import org.apache.commons.codec.binary.Hex
 import javax.crypto.Mac
@@ -23,6 +26,29 @@ class BithumbModel(
         val header = makeHeader(INFO_ACCOUNT_URL, params)
         return BithumbClient.getPrivateService()
             .getAccount(header, params)
+    }
+
+    suspend fun getAccountKtor(orderCurrency: String): com.hoya.ddory.coconut.cloud.response.ktor.Account {
+        val params = hashMapOf(
+            Pair("endpoint", INFO_ACCOUNT_URL),
+            Pair("order_currency", orderCurrency)
+        )
+        val headers = makeHeader(INFO_ACCOUNT_URL, params)
+        return com.hoya.ddory.coconut.cloud.ktor.BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$INFO_ACCOUNT_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
     fun getBalance(currency: String = "ALL"): Single<Balance> {
