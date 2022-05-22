@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">coconut</string>
+    <string-array name="target_currency">
+        <item>KRW</item>
+        <item>XRP</item>
+        <item>ETH</item>
+        <item>ETC</item>
+        <item>EOS</item>
+    </string-array>
+
+    <string-array name="payment_currency">
+        <item>XRP</item>
+        <item>ETH</item>
+        <item>ETC</item>
+        <item>EOS</item>
+    </string-array>
+
+    <string-array name="payment_currency_krw">
+        <item>KRW</item>
+    </string-array>
 </resources>

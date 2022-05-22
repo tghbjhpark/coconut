@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import com.hoya.ddory.coconut.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
@@ -15,13 +17,18 @@ class AccountFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewDataBinding = FragmentAccountBinding.inflate(inflater, container, false).apply {
-            viewModel = AccountViewModel()
+            viewModel = AccountViewModel().apply {
+                addAccountEvent.observe(viewLifecycleOwner) {
+                    findNavController().navigate(AccountFragmentDirections.actionAccountFragmentToAddAccountFragment())
+                }
+            }
         }
         return viewDataBinding.root
     }

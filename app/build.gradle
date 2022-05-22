@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -49,16 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // rxjava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-
-    // retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
-
     // Room components
     implementation "android.arch.persistence.room:runtime:2.2.5"
     implementation "androidx.room:room-ktx:2.3.0"
@@ -71,4 +63,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha10"
+
+    // Ktor
+    implementation "io.ktor:ktor-client-okhttp:1.6.6"
+    implementation "io.ktor:ktor-client-json:1.6.6"
+    implementation "io.ktor:ktor-client-serialization-jvm:1.6.6"
+    implementation "io.ktor:ktor-client-logging:1.6.6"
 }

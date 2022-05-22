@@ -1,15 +1,17 @@
 package com.hoya.ddory.coconut.cloud.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Balance(
-    @SerializedName("status") val status: String,
-    @SerializedName("data") val data: BalanceData
+    val status: String,
+    val data: BalanceData
 )
 
+@Serializable
 data class BalanceData(
-    @SerializedName("total_btc") val btc: String,
-    @SerializedName("total_eth") val eth: String,
-    @SerializedName("total_xrp") val xrp: String,
-    @SerializedName("total_krw") val krw: String
+    val btc: String,
+    val eth: String,
+    val xrp: String,
+    val krw: String
 )

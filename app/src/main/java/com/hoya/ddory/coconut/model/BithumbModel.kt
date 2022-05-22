@@ -2,11 +2,13 @@ package com.hoya.ddory.coconut.model
 
 import android.util.Base64
 import com.hoya.ddory.coconut.cloud.BithumbClient
-import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.Balance
+import com.hoya.ddory.coconut.cloud.response.OrderResult
 import com.hoya.ddory.coconut.cloud.response.Orders
-import com.hoya.ddory.coconut.cloud.response.Trade
-import io.reactivex.Single
+import com.hoya.ddory.coconut.cloud.response.ktor.Account
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 import org.apache.commons.codec.binary.Hex
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -15,60 +17,126 @@ class BithumbModel(
     private val apiKey: String,
     private val apiSecret: String
 ) {
-    fun getAccount(orderCurrency: String): Single<Account> {
+
+    suspend fun getAccountKtor(orderCurrency: String): Account {
         val params = hashMapOf(
             Pair("endpoint", INFO_ACCOUNT_URL),
             Pair("order_currency", orderCurrency)
         )
-        val header = makeHeader(INFO_ACCOUNT_URL, params)
-        return BithumbClient.getPrivateService()
-            .getAccount(header, params)
+        val headers = makeHeader(INFO_ACCOUNT_URL, params)
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$INFO_ACCOUNT_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
-    fun getBalance(currency: String = "ALL"): Single<Balance> {
+    suspend fun getBalanceKtor(currency: String = "ALL"): Balance {
         val params = hashMapOf(
             Pair("endpoint", INFO_BALANCE_URL),
             Pair("currency", currency)
         )
-        val header = makeHeader(INFO_BALANCE_URL, params)
-        return BithumbClient.getPrivateService()
-            .getBalance(header, params)
+        val headers = makeHeader(INFO_BALANCE_URL, params)
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$INFO_BALANCE_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
-    fun getOrders(id: String, orderCurrency: String, paymentCurrency: String = "KRW"): Single<Orders> {
+    suspend fun getOrdersKtor(id: String, orderCurrency: String, paymentCurrency: String = "KRW"): Orders {
         val params = hashMapOf(
             Pair("endpoint", INFO_ORDERS_URL),
             Pair("order_id", id),
             Pair("order_currency", orderCurrency),
             Pair("payment_currency", paymentCurrency)
         )
-        val header = makeHeader(INFO_ORDERS_URL, params)
-        return BithumbClient.getPrivateService()
-            .getOrders(header, params)
+        val headers = makeHeader(INFO_ORDERS_URL, params)
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$INFO_ORDERS_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
-    fun buy(orderCurrency: String, units: Float): Single<Trade> {
+    suspend fun buyKtor(orderCurrency: String, units: Float): OrderResult {
         val params = hashMapOf(
             Pair("endpoint", TRADE_BUY_URL),
             Pair("units", units.toString()),
             Pair("order_currency", orderCurrency),
             Pair("payment_currency", "KRW")
         )
-        val header = makeHeader(TRADE_BUY_URL, params)
-        return BithumbClient.getTradeService()
-            .buyMarketPrice(header, params)
+        val headers = makeHeader(TRADE_BUY_URL, params)
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$TRADE_BUY_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
-    fun sell(orderCurrency: String, units: Float): Single<Trade> {
+    suspend fun sellKtor(orderCurrency: String, units: Float): OrderResult {
         val params = hashMapOf(
             Pair("endpoint", TRADE_SELL_URL),
             Pair("units", units.toString()),
             Pair("order_currency", orderCurrency),
             Pair("payment_currency", "KRW")
         )
-        val header = makeHeader(TRADE_SELL_URL, params)
-        return BithumbClient.getTradeService()
-            .sellMarketPrice(header, params)
+        val headers = makeHeader(TRADE_SELL_URL, params)
+        return  BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$TRADE_SELL_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
     private fun makeHeader(url: String, param: HashMap<String, String>): HashMap<String, String> {
