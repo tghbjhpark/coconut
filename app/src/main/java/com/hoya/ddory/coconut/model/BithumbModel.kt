@@ -1,10 +1,10 @@
 package com.hoya.ddory.coconut.model
 
 import android.util.Base64
-import com.hoya.ddory.coconut.cloud.ktor.BithumbClient
-import com.hoya.ddory.coconut.cloud.ktor.response.Balance
-import com.hoya.ddory.coconut.cloud.ktor.response.OrderResult
-import com.hoya.ddory.coconut.cloud.ktor.response.Orders
+import com.hoya.ddory.coconut.cloud.BithumbClient
+import com.hoya.ddory.coconut.cloud.response.Balance
+import com.hoya.ddory.coconut.cloud.response.OrderResult
+import com.hoya.ddory.coconut.cloud.response.Orders
 import com.hoya.ddory.coconut.cloud.response.ktor.Account
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*

@@ -1,4 +1,4 @@
-package com.hoya.ddory.coconut.cloud.ktor
+package com.hoya.ddory.coconut.cloud
 
 import android.util.Log
 import io.ktor.client.HttpClient

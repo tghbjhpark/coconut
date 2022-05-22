@@ -1,4 +1,4 @@
-package com.hoya.ddory.coconut.cloud.ktor.response
+package com.hoya.ddory.coconut.cloud.response
 
 import kotlinx.serialization.Serializable
 
