@@ -1,28 +1,31 @@
 package com.hoya.ddory.coconut.cloud.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Orders(
-    @SerializedName("status") val status: String,
-    @SerializedName("data") val data: List<OrderData>
+    val status: String,
+    val data: List<OrderData>
 )
 
+@Serializable
 data class OrderData(
-    @SerializedName("transaction_date") val date: String,
-    @SerializedName("type") val type: String,
-    @SerializedName("order_status") val status: String,
-    @SerializedName("order_currency") val orderCurrency: String,
-    @SerializedName("payment_currency") val paymentCurrency: String,
-    @SerializedName("order_price") val price: String,
-    @SerializedName("order_qty") val quantity: String,
-    @SerializedName("contract") val contract: List<OrderContract>
+    val transaction_date: String,
+    val type: String,
+    val order_status: String,
+    val order_currency: String,
+    val payment_currency: String,
+    val order_price: String,
+    val order_qty: String,
+    val contract: List<OrderContract>
 )
 
+@Serializable
 data class OrderContract(
-    @SerializedName("transaction_date") val date: String,
-    @SerializedName("price") val price: String,
-    @SerializedName("units") val units: String,
-    @SerializedName("fee_currency") val feeCurrency: String,
-    @SerializedName("fee") val fee: String,
-    @SerializedName("total") val total: String
+    val transaction_date: String,
+    val price: String,
+    val units: String,
+    val fee_currency: String,
+    val fee: String,
+    val total: String
 )
