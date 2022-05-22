@@ -2,6 +2,7 @@ package com.hoya.ddory.coconut.model
 
 import android.util.Base64
 import com.hoya.ddory.coconut.cloud.BithumbClient
+import com.hoya.ddory.coconut.cloud.ktor.response.OrderResult
 import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.Balance
 import com.hoya.ddory.coconut.cloud.response.Orders
@@ -61,6 +62,29 @@ class BithumbModel(
             .getBalance(header, params)
     }
 
+    suspend fun getBalanceKtor(currency: String = "ALL"): com.hoya.ddory.coconut.cloud.ktor.response.Balance {
+        val params = hashMapOf(
+            Pair("endpoint", INFO_BALANCE_URL),
+            Pair("currency", currency)
+        )
+        val headers = makeHeader(INFO_BALANCE_URL, params)
+        return com.hoya.ddory.coconut.cloud.ktor.BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$INFO_BALANCE_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
+    }
+
     fun getOrders(id: String, orderCurrency: String, paymentCurrency: String = "KRW"): Single<Orders> {
         val params = hashMapOf(
             Pair("endpoint", INFO_ORDERS_URL),
@@ -71,6 +95,31 @@ class BithumbModel(
         val header = makeHeader(INFO_ORDERS_URL, params)
         return BithumbClient.getPrivateService()
             .getOrders(header, params)
+    }
+
+    suspend fun getOrdersKtor(id: String, orderCurrency: String, paymentCurrency: String = "KRW"): com.hoya.ddory.coconut.cloud.ktor.response.Orders {
+        val params = hashMapOf(
+            Pair("endpoint", INFO_ORDERS_URL),
+            Pair("order_id", id),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", paymentCurrency)
+        )
+        val headers = makeHeader(INFO_ORDERS_URL, params)
+        return com.hoya.ddory.coconut.cloud.ktor.BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$INFO_ORDERS_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
     fun buy(orderCurrency: String, units: Float): Single<Trade> {
@@ -85,6 +134,31 @@ class BithumbModel(
             .buyMarketPrice(header, params)
     }
 
+    suspend fun buyKtor(orderCurrency: String, units: Float): OrderResult {
+        val params = hashMapOf(
+            Pair("endpoint", TRADE_BUY_URL),
+            Pair("units", units.toString()),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", "KRW")
+        )
+        val headers = makeHeader(TRADE_BUY_URL, params)
+        return com.hoya.ddory.coconut.cloud.ktor.BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$TRADE_BUY_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
+    }
+
     fun sell(orderCurrency: String, units: Float): Single<Trade> {
         val params = hashMapOf(
             Pair("endpoint", TRADE_SELL_URL),
@@ -95,6 +169,31 @@ class BithumbModel(
         val header = makeHeader(TRADE_SELL_URL, params)
         return BithumbClient.getTradeService()
             .sellMarketPrice(header, params)
+    }
+
+    suspend fun sellKtor(orderCurrency: String, units: Float): OrderResult {
+        val params = hashMapOf(
+            Pair("endpoint", TRADE_SELL_URL),
+            Pair("units", units.toString()),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", "KRW")
+        )
+        val headers = makeHeader(TRADE_SELL_URL, params)
+        return  com.hoya.ddory.coconut.cloud.ktor.BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$TRADE_SELL_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
     }
 
     private fun makeHeader(url: String, param: HashMap<String, String>): HashMap<String, String> {
