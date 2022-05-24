@@ -69,4 +69,18 @@ dependencies {
     implementation "io.ktor:ktor-client-json:1.6.6"
     implementation "io.ktor:ktor-client-serialization-jvm:1.6.6"
     implementation "io.ktor:ktor-client-logging:1.6.6"
+
+    // Compose
+    implementation("androidx.compose.ui:ui:1.1.1")
+    // Tooling support (Previews, etc.)
+    implementation("androidx.compose.ui:ui-tooling:1.1.1")
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation("androidx.compose.foundation:foundation:1.1.1")
+    // Material Design
+    implementation("androidx.compose.material:material:1.1.1")
+    // Material design icons
+    implementation("androidx.compose.material:material-icons-core:1.1.1")
+    implementation("androidx.compose.material:material-icons-extended:1.1.1")
+    // Integration with observables
+    implementation("androidx.compose.runtime:runtime-livedata:1.1.1")
 }
