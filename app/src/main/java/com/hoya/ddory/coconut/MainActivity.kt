@@ -3,14 +3,18 @@ package com.hoya.ddory.coconut
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        getTokenFromAsset()
+        setContent {
+            MainScreen()
+        }
     }
 
     fun getTokenFromAsset() {
@@ -28,6 +32,13 @@ class MainActivity : AppCompatActivity() {
         inputStream.close()
 
         Log.i(TAG, "${String(key)}, ${String(secret)}")
+    }
+    
+    @Composable
+    private fun MainScreen() {
+        MaterialTheme {
+            Text(text = "Hello World!!")
+        }
     }
 
     companion object {
