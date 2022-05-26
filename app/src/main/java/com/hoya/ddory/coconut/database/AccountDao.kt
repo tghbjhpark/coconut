@@ -5,19 +5,17 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Update
 import com.hoya.ddory.coconut.database.entity.Account
-import io.reactivex.Completable
-import io.reactivex.Single
 
 @Dao interface AccountDao {
     @Query("SELECT * FROM ACCOUNT_TABLE")
-    fun getAccounts(): Single<List<Account>>
+    suspend fun getAccounts(): List<Account>
 
     @Query("SELECT * FROM ACCOUNT_TABLE WHERE id = :id")
-    fun getAccount(id: Int): Single<Account>
+    suspend fun getAccount(id: Int): Account
 
     @Update
-    fun updateAccount(account: Account): Completable
+    suspend fun updateAccount(account: Account)
 
     @Delete
-    fun deleteAccount(account: Account): Completable
+    suspend fun deleteAccount(account: Account)
 }

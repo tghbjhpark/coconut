@@ -9,7 +9,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.hoya.ddory.coconut.R
 import com.hoya.ddory.coconut.databinding.FragmentAddaccountBinding
-import kotlinx.android.synthetic.main.fragment_addaccount.*
 
 class AddAccountFragment : Fragment() {
 
@@ -48,6 +47,6 @@ class AddAccountFragment : Fragment() {
             getAdapterItemLayout(),
             resources.getStringArray(R.array.target_currency)
         )
-        outlined_exposed_dropdown.setAdapter(adapter)
+        viewDataBinding.outlinedExposedDropdown.setAdapter(adapter)
     }
 }

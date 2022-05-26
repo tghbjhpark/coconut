@@ -8,11 +8,11 @@ class DatabaseModel(context: Context) {
 
     val accountDao = CoconutDatabase.getInstance(context).accountDao()
 
-    fun getAccounts() = accountDao.getAccounts()
+    suspend fun getAccounts() = accountDao.getAccounts()
 
-    fun getAccount(id: Int) = accountDao.getAccount(id)
+    suspend fun getAccount(id: Int) = accountDao.getAccount(id)
 
-    fun updateAccount(account: Account) = accountDao.updateAccount(account)
+    suspend fun updateAccount(account: Account) = accountDao.updateAccount(account)
 
-    fun deleteAccount(account: Account) = accountDao.deleteAccount(account)
+    suspend fun deleteAccount(account: Account) = accountDao.deleteAccount(account)
 }
