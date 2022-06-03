@@ -13,6 +13,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.hoya.ddory.coconut.view.CoconutNavHost
 import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
@@ -43,24 +46,9 @@ class MainActivity : AppCompatActivity() {
     @Composable
     private fun MainScreen() {
         MaterialTheme {
-            Scaffold(
-                topBar = {
-                    CenterAlignedTopAppBar(
-                        title = {
-                            Text(text = "Accounts")
-                        },
-                    actions = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Add"
-                            )
-                        }
-                    })
-                }
-            ) {
-
-            }
+            val navController = rememberNavController()
+            val backstackEntry = navController.currentBackStackEntryAsState()
+            CoconutNavHost(navController = navController)
         }
     }
 
