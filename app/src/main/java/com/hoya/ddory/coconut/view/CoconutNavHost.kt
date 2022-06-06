@@ -24,7 +24,7 @@ fun CoconutNavHost(navController: NavHostController, modifier: Modifier = Modifi
         }
         composable(CoconutScreen.AddAccount.name) {
             AddAccountScreen(
-                onNavigationClick = {
+                onBackClick = {
                     navController.popBackStack()
                 }
             )
