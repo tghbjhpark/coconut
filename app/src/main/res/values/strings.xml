@@ -18,4 +18,16 @@
     <string-array name="payment_currency_krw">
         <item>KRW</item>
     </string-array>
+
+    <string name="name_btc">비트코인</string>
+    <string name="name_eth">이더리움</string>
+    <string name="name_xrp">리플</string>
+    <string name="name_ada">에이다</string>
+    <string name="name_link">체인링크</string>
+    <string name="name_trx">트론</string>
+    <string name="name_eos">이오스</string>
+    <string name="name_xlm">스텔라루멘</string>
+    <string name="name_bch">비트코인캐시</string>
+    <string name="name_wemix">위믹스</string>
+    <string name="name_klay">클레이튼</string>
 </resources>
