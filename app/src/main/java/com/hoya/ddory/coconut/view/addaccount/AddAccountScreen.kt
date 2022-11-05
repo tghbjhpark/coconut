@@ -59,7 +59,12 @@ fun AddAccountScreen(
                 addAccountViewModel::changeDeposit
             )
             SelectCoin(addAccountViewModel.coinNameResourceIdList())
-            Rule()
+            Rule(
+                addAccountViewModel.buyAbove,
+                addAccountViewModel::changeBuyAbove,
+                addAccountViewModel.buyBelow,
+                addAccountViewModel::changeBuyBelow
+            )
             Buttons(onBackClick, onCreateClick)
         }
     }
@@ -130,10 +135,28 @@ fun SelectCoin(
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
-fun Rule() {
+fun Rule(
+    buyAboveAverage: String,
+    onBuyAboveAverageValueChange: (String) -> Unit = {},
+    buyBelowAverage: String,
+    onBuyBelowAverageValueChange: (String) -> Unit = {}
+) {
     Row {
         Icon(painter = painterResource(id = R.drawable.ic_rule), contentDescription = null)
+        Column {
+            OutlinedTextField(
+                value = buyAboveAverage,
+                onValueChange = onBuyAboveAverageValueChange,
+                label = { Text("Buy above average") }
+            )
+            OutlinedTextField(
+                value = buyBelowAverage,
+                onValueChange = onBuyBelowAverageValueChange,
+                label = { Text("Buy below average") }
+            )
+        }
     }
 }
 
