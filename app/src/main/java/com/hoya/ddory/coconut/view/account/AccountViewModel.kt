@@ -2,28 +2,20 @@ package com.hoya.ddory.coconut.view.account
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hoya.ddory.coconut.database.entity.Account
 import com.hoya.ddory.coconut.model.BithumbModel
+import com.hoya.ddory.coconut.model.DatabaseModel
 import kotlinx.coroutines.launch
 import java.io.InputStream
 
 class AccountViewModel : ViewModel() {
-    private val _krw = MutableLiveData<String>().apply { value = "krw" }
-    val krw: LiveData<String>
-        get() = _krw
 
-    private val _xrp = MutableLiveData<String>().apply { value = "xrp" }
-    val xrp: LiveData<String>
-        get() = _xrp
-
-    private val _addAccountEvent: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
-    val addAccountEvent: LiveData<Boolean>
-        get() = _addAccountEvent
+    private var _accountList = emptyList<Account>().toMutableStateList()
+    val accountList: List<Account>
+        get() = _accountList
 
     fun onResume(context: Context) {
         Log.i("JONGHO", "onResume")
@@ -53,13 +45,13 @@ class AccountViewModel : ViewModel() {
         }
     }
 
-    fun onPause() {
-
-    }
-
-    fun addAccount() {
-        Log.i(TAG, "addAccount")
-        _addAccountEvent.postValue(true)
+    fun getTaskList(context: Context) {
+        Log.i("JONGHO", "getTaskList")
+        val databaseModel = DatabaseModel(context)
+        viewModelScope.launch {
+            _accountList.clear()
+            _accountList.addAll(databaseModel.getAccounts())
+        }
     }
 
     companion object {
