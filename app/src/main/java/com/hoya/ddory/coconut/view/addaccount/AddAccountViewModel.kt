@@ -1,11 +1,15 @@
 package com.hoya.ddory.coconut.view.addaccount
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hoya.ddory.coconut.data.Coin
+import com.hoya.ddory.coconut.database.entity.Account
+import com.hoya.ddory.coconut.model.DatabaseModel
+import kotlinx.coroutines.launch
 
 class AddAccountViewModel : ViewModel() {
 
@@ -36,6 +40,21 @@ class AddAccountViewModel : ViewModel() {
     fun coinNameResourceIdList(): List<Int> {
         return Coin.values().map {
             it.nameResource
+        }
+    }
+
+    fun createAccount(context: Context) {
+        // TODO :: change orderCurrency
+        val account = Account(
+            orderCurrency = "XRP",
+            paymentCurrency = "KRW",
+            initDeposit = deposit,
+            amountBuyAbove = buyAbove,
+            amountBuyBelow = buyBelow
+        )
+        val databaseModel = DatabaseModel(context)
+        viewModelScope.launch {
+            databaseModel.insertAccount(account)
         }
     }
 }

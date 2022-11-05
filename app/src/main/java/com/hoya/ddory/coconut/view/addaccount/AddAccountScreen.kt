@@ -1,5 +1,6 @@
 package com.hoya.ddory.coconut.view.addaccount
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,7 +38,6 @@ fun AddAccountScreen(
     modifier: Modifier = Modifier,
     addAccountViewModel: AddAccountViewModel = viewModel(),
     onBackClick: () -> Unit,
-    onCreateClick: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -65,7 +66,7 @@ fun AddAccountScreen(
                 addAccountViewModel.buyBelow,
                 addAccountViewModel::changeBuyBelow
             )
-            Buttons(onBackClick, onCreateClick)
+            Buttons(onBackClick, addAccountViewModel::createAccount)
         }
     }
 }
@@ -163,13 +164,17 @@ fun Rule(
 @Composable
 fun Buttons(
     onBackClick: () -> Unit,
-    onCreateClick: () -> Unit
+    onCreateClick: (Context) -> Unit
 ) {
+    val context = LocalContext.current
     Row {
         OutlinedButton(onClick = onBackClick) {
             Text(text = "Back")
         }
-        OutlinedButton(onClick = onCreateClick) {
+        OutlinedButton(onClick = {
+            onCreateClick.invoke(context)
+            onBackClick.invoke()
+        }) {
             Text(text = "Create")
         }
     }

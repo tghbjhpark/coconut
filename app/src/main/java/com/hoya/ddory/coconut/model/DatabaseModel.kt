@@ -6,11 +6,13 @@ import com.hoya.ddory.coconut.database.entity.Account
 
 class DatabaseModel(context: Context) {
 
-    val accountDao = CoconutDatabase.getInstance(context).accountDao()
+    private val accountDao = CoconutDatabase.getInstance(context).accountDao()
 
     suspend fun getAccounts() = accountDao.getAccounts()
 
     suspend fun getAccount(id: Int) = accountDao.getAccount(id)
+
+    suspend fun insertAccount(account: Account) = accountDao.insertAccount(account)
 
     suspend fun updateAccount(account: Account) = accountDao.updateAccount(account)
 
