@@ -1,5 +1,6 @@
 package com.hoya.ddory.coconut.model
 
+import android.content.Context
 import android.util.Base64
 import com.hoya.ddory.coconut.cloud.BithumbClient
 import com.hoya.ddory.coconut.cloud.response.Balance
@@ -13,10 +14,23 @@ import org.apache.commons.codec.binary.Hex
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-class BithumbModel(
-    private val apiKey: String,
-    private val apiSecret: String
-) {
+class BithumbModel(context: Context) {
+
+    private val apiKey: String by lazy {
+        readAssets(context, "api_key")
+    }
+
+    private val apiSecret: String by lazy {
+        readAssets(context, "api_secret")
+    }
+
+    private fun readAssets(context: Context, fileName: String): String {
+        val inputStream = context.resources.assets.open(fileName)
+        val key = ByteArray(32)
+        inputStream.read(key)
+        inputStream.close()
+        return String(key)
+    }
 
     suspend fun getAccountKtor(orderCurrency: String): Account {
         val params = hashMapOf(

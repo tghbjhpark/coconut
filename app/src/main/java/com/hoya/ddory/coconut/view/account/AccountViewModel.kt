@@ -9,7 +9,6 @@ import com.hoya.ddory.coconut.database.entity.Account
 import com.hoya.ddory.coconut.model.BithumbModel
 import com.hoya.ddory.coconut.model.DatabaseModel
 import kotlinx.coroutines.launch
-import java.io.InputStream
 
 class AccountViewModel : ViewModel() {
 
@@ -19,21 +18,9 @@ class AccountViewModel : ViewModel() {
 
     fun onResume(context: Context) {
         Log.i("JONGHO", "onResume")
-        val assetmanager = context.resources.assets
-        var inputStream: InputStream
-        val key = ByteArray(32)
-        val secret = ByteArray(32)
-
-        inputStream = assetmanager.open("api_key")
-        inputStream.read(key)
-        inputStream.close()
-
-        inputStream = assetmanager.open("api_secret")
-        inputStream.read(secret)
-        inputStream.close()
         viewModelScope.launch {
             kotlin.runCatching {
-                BithumbModel(String(key), String(secret))
+                BithumbModel(context)
                     .getAccountKtor("BTC")
             }
                 .onSuccess {
