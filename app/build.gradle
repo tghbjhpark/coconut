@@ -72,6 +72,9 @@ dependencies {
     implementation "io.ktor:ktor-client-serialization-jvm:$ktor_version"
     implementation "io.ktor:ktor-client-logging:$ktor_version"
 
+    // Worker
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
     // Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     // Tooling support (Previews, etc.)
