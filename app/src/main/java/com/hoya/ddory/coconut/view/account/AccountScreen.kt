@@ -1,5 +1,6 @@
 package com.hoya.ddory.coconut.view.account
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -16,6 +19,9 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -48,7 +54,10 @@ fun AccountScreen(
     ) {
         AccountList(
             modifier = Modifier.padding(it),
-            accounts = accountViewModel.accountList
+            accounts = accountViewModel.accountList,
+            playClick = { id ->
+                accountViewModel.playPause(id, context)
+            }
         )
     }
 }
@@ -57,7 +66,8 @@ fun AccountScreen(
 @Composable
 fun AccountList(
     modifier: Modifier,
-    accounts: List<Account>
+    accounts: List<Account>,
+    playClick: (Int) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -73,12 +83,15 @@ fun AccountList(
                 account.initDeposit,
                 account.orderCurrency,
                 account.available,
-                account.quantity
+                account.quantity,
+                account.state == "START",
+                playClick
             )
         }
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterial3Api
 @Composable
 fun AccountItem(
@@ -86,8 +99,11 @@ fun AccountItem(
     initDeposit: String,
     orderCurrency: String,
     currentDeposit: String,
-    coinQuantity: String
+    coinQuantity: String,
+    isPlaying: Boolean,
+    playClick: (Int) -> Unit
 ) {
+    val state: Boolean by mutableStateOf(isPlaying)
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth(),
@@ -100,6 +116,12 @@ fun AccountItem(
             Text(text = orderCurrency)
             Text(text = currentDeposit)
             Text(text = coinQuantity)
+            IconButton(onClick = { playClick(id) }) {
+                Icon(
+                    imageVector = if (state) Icons.Filled.PlayArrow else Icons.Filled.Close,
+                    contentDescription = "Add"
+                )
+            }
         }
     }
 }
