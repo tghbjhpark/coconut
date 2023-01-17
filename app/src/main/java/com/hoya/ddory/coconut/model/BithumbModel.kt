@@ -6,7 +6,8 @@ import com.hoya.ddory.coconut.cloud.BithumbClient
 import com.hoya.ddory.coconut.cloud.response.Balance
 import com.hoya.ddory.coconut.cloud.response.OrderResult
 import com.hoya.ddory.coconut.cloud.response.Orders
-import com.hoya.ddory.coconut.cloud.response.ktor.Account
+import com.hoya.ddory.coconut.cloud.response.Account
+import com.hoya.ddory.coconut.cloud.response.TransactionHistory
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -30,6 +31,15 @@ class BithumbModel(context: Context) {
         inputStream.read(key)
         inputStream.close()
         return String(key)
+    }
+
+    // Public API
+    suspend fun getTransactionHistory(orderCurrency: String): TransactionHistory {
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com/public/transaction_history/${orderCurrency}_KRW?count=1") {
+                method = HttpMethod.Get
+            }
     }
 
     suspend fun getAccountKtor(orderCurrency: String): Account {
@@ -78,7 +88,11 @@ class BithumbModel(context: Context) {
             }
     }
 
-    suspend fun getOrdersKtor(id: String, orderCurrency: String, paymentCurrency: String = "KRW"): Orders {
+    suspend fun getOrdersKtor(
+        id: String,
+        orderCurrency: String,
+        paymentCurrency: String = "KRW"
+    ): Orders {
         val params = hashMapOf(
             Pair("endpoint", INFO_ORDERS_URL),
             Pair("order_id", id),
@@ -136,7 +150,7 @@ class BithumbModel(context: Context) {
             Pair("payment_currency", "KRW")
         )
         val headers = makeHeader(TRADE_SELL_URL, params)
-        return  BithumbClient()
+        return BithumbClient()
             .httpClient
             .request("https://api.bithumb.com$TRADE_SELL_URL") {
                 method = HttpMethod.Post
@@ -160,10 +174,12 @@ class BithumbModel(context: Context) {
         param.forEach { (key, value) ->
             formUrlEncoded += "$key=${value.replace("/", "%2F")}&"
         }
-        val str = "$url;${formUrlEncoded.removeRange(
-            formUrlEncoded.length - 1,
-            formUrlEncoded.length
-        )};$nonce"
+        val str = "$url;${
+            formUrlEncoded.removeRange(
+                formUrlEncoded.length - 1,
+                formUrlEncoded.length
+            )
+        };$nonce"
         encrypted(str)
 
         return hashMapOf(
