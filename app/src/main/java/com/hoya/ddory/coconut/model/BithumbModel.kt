@@ -142,6 +142,33 @@ class BithumbModel(context: Context) {
             }
     }
 
+    suspend fun buyKtor(orderCurrency: String, price: Float, units: Float): OrderResult {
+        val params = hashMapOf(
+            Pair("endpoint", TRADE_PLACE),
+            Pair("price", price.toString()),
+            Pair("units", units.toString()),
+            Pair("type", "bid"),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", "KRW")
+        )
+        val headers = makeHeader(TRADE_PLACE, params)
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$TRADE_PLACE") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
+    }
+
     suspend fun sellKtor(orderCurrency: String, units: Float): OrderResult {
         val params = hashMapOf(
             Pair("endpoint", TRADE_SELL_URL),
@@ -153,6 +180,33 @@ class BithumbModel(context: Context) {
         return BithumbClient()
             .httpClient
             .request("https://api.bithumb.com$TRADE_SELL_URL") {
+                method = HttpMethod.Post
+                headers {
+                    headers.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                }
+                body = FormDataContent(Parameters.build {
+                    params.forEach { (t, u) ->
+                        append(t, u)
+                    }
+                })
+            }
+    }
+
+    suspend fun sellKtor(orderCurrency: String, price: Float, units: Float): OrderResult {
+        val params = hashMapOf(
+            Pair("endpoint", TRADE_PLACE),
+            Pair("price", price.toString()),
+            Pair("units", units.toString()),
+            Pair("type", "ask"),
+            Pair("order_currency", orderCurrency),
+            Pair("payment_currency", "KRW")
+        )
+        val headers = makeHeader(TRADE_PLACE, params)
+        return BithumbClient()
+            .httpClient
+            .request("https://api.bithumb.com$TRADE_PLACE") {
                 method = HttpMethod.Post
                 headers {
                     headers.forEach { (t, u) ->
@@ -213,5 +267,6 @@ class BithumbModel(context: Context) {
 
         private const val TRADE_BUY_URL = "/trade/market_buy"
         private const val TRADE_SELL_URL = "/trade/market_sell"
+        private const val TRADE_PLACE = "/trade/place"
     }
 }
