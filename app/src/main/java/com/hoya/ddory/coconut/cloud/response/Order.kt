@@ -3,20 +3,23 @@ package com.hoya.ddory.coconut.cloud.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Orders(
+data class Order(
     val status: String,
-    val data: List<OrderData>
+    val data: OrderData
 )
 
 @Serializable
 data class OrderData(
-    val transaction_date: String,
+    val order_date: String,
     val type: String,
     val order_status: String,
     val order_currency: String,
     val payment_currency: String,
+    val watch_price: String,
     val order_price: String,
     val order_qty: String,
+    val cancel_date: String,
+    val cancel_type: String,
     val contract: List<OrderContract>
 )
 

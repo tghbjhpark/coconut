@@ -5,7 +5,7 @@ import android.util.Base64
 import com.hoya.ddory.coconut.cloud.BithumbClient
 import com.hoya.ddory.coconut.cloud.response.Balance
 import com.hoya.ddory.coconut.cloud.response.OrderResult
-import com.hoya.ddory.coconut.cloud.response.Orders
+import com.hoya.ddory.coconut.cloud.response.Order
 import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.TransactionHistory
 import io.ktor.client.request.*
@@ -92,7 +92,7 @@ class BithumbModel(context: Context) {
         id: String,
         orderCurrency: String,
         paymentCurrency: String = "KRW"
-    ): Orders {
+    ): Order {
         val params = hashMapOf(
             Pair("endpoint", INFO_ORDERS_URL),
             Pair("order_id", id),
