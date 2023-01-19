@@ -142,7 +142,7 @@ class BithumbModel(context: Context) {
             }
     }
 
-    suspend fun buyKtor(orderCurrency: String, price: Float, units: Float): OrderResult {
+    suspend fun buyKtor(orderCurrency: String, price: String, units: Float): OrderResult {
         val params = hashMapOf(
             Pair("endpoint", TRADE_PLACE),
             Pair("price", price.toString()),
@@ -194,10 +194,10 @@ class BithumbModel(context: Context) {
             }
     }
 
-    suspend fun sellKtor(orderCurrency: String, price: Float, units: Float): OrderResult {
+    suspend fun sellKtor(orderCurrency: String, price: String, units: Float): OrderResult {
         val params = hashMapOf(
             Pair("endpoint", TRADE_PLACE),
-            Pair("price", price.toString()),
+            Pair("price", price),
             Pair("units", units.toString()),
             Pair("type", "ask"),
             Pair("order_currency", orderCurrency),

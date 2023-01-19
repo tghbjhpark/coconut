@@ -50,8 +50,10 @@ class AddAccountViewModel : ViewModel() {
             paymentCurrency = "KRW",
             initDeposit = deposit,
             amountBuyAbove = buyAbove,
-            amountBuyBelow = buyBelow
-        )
+            amountBuyBelow = buyBelow,
+        ).apply {
+            available = initDeposit
+        }
         val databaseModel = DatabaseModel(context)
         viewModelScope.launch {
             databaseModel.insertAccount(account)

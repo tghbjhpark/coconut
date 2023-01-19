@@ -31,6 +31,9 @@ data class Account(
     @ColumnInfo(name = "interval_sec")
     var intervalSec: Int = 3600
 
+    @ColumnInfo(name = "average")
+    var average: String = "0"
+
     @ColumnInfo(name = "state")
     var state: String = "STOP"
 }
