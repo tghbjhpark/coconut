@@ -18,7 +18,7 @@ class OrderPlaceWorker(
 
     override suspend fun doWork(): Result {
 
-        val type = inputData.getInt(ORDER_TYPE, OrderWorker.TYPE_BUY)
+        val type = inputData.getInt(ORDER_TYPE, TYPE_BUY)
         val price = inputData.getFloat(ORDER_PRICE, -1f)
         val id = inputData.getInt(ORDER_ACCOUNT_ID, -1)
         val amount = inputData.getInt(ORDER_AMOUNT, 0)
