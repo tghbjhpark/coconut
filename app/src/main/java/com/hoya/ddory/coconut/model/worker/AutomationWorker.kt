@@ -3,7 +3,6 @@ package com.hoya.ddory.coconut.model.worker
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit
 class AutomationWorker(
     appContext: Context,
     workerParameters: WorkerParameters
-): CoroutineWorker(appContext, workerParameters) {
+) : CoroutineWorker(appContext, workerParameters) {
 
     override suspend fun doWork(): Result {
         Log.i("JONGHO", "AutomationWorker")
@@ -23,17 +22,14 @@ class AutomationWorker(
         if (id == -1) return Result.failure()
 
         val account = DatabaseModel(applicationContext).getAccount(id)
-        val price = BithumbModel(applicationContext).getTransactionHistory(account.orderCurrency).data.first().price.toFloat()
+        val price =
+            BithumbModel(applicationContext).getTransactionHistory(account.orderCurrency).data.first().price.toFloat()
 
 
         if (account.quantity.toFloat() == 0f) {
             // buy amountAbove
-            val input = Data.Builder()
-                .putInt(OrderPlaceWorker.ORDER_TYPE, OrderPlaceWorker.TYPE_BUY)
-                .putInt(OrderPlaceWorker.ORDER_AMOUNT, account.amountBuyAbove.toInt())
-                .putInt(OrderPlaceWorker.ORDER_ACCOUNT_ID, id)
-                .putFloat(OrderPlaceWorker.ORDER_PRICE, price)
-                .build()
+            val input =
+                WorkerManager.orderPlaceWorkerBuyData(id, account.amountBuyAbove.toInt(), price)
             val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                 .setInputData(input)
                 .addTag("account_id_$id")
@@ -42,11 +38,7 @@ class AutomationWorker(
         } else {
             if (price > account.average.toFloat() * 1.03) {
                 // sell
-                val input = Data.Builder()
-                    .putInt(OrderPlaceWorker.ORDER_TYPE, OrderPlaceWorker.TYPE_SELL)
-                    .putInt(OrderPlaceWorker.ORDER_ACCOUNT_ID, id)
-                    .putFloat(OrderPlaceWorker.ORDER_PRICE, price)
-                    .build()
+                val input = WorkerManager.orderPlaceWorkerSellData(id, price)
                 val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                     .setInputData(input)
                     .addTag("account_id_$id")
@@ -56,9 +48,7 @@ class AutomationWorker(
                 // buy
                 if (price > account.average.toFloat()) {
                     if (account.available.toFloat() < account.amountBuyAbove.toFloat()) {
-                        val inputData = Data.Builder()
-                            .putInt(AutomationWorker.AUTOMATION_ACCOUNT_ID, id)
-                            .build()
+                        val inputData = WorkerManager.automationWorkerData(id)
                         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
                             .setInputData(inputData)
                             .addTag("account_id_$id")
@@ -68,12 +58,11 @@ class AutomationWorker(
                         return Result.success()
                     }
                     // buy amountAbove
-                    val input = Data.Builder()
-                        .putInt(OrderPlaceWorker.ORDER_TYPE, OrderPlaceWorker.TYPE_BUY)
-                        .putInt(OrderPlaceWorker.ORDER_AMOUNT, account.amountBuyAbove.toInt())
-                        .putInt(OrderPlaceWorker.ORDER_ACCOUNT_ID, id)
-                        .putFloat(OrderPlaceWorker.ORDER_PRICE, price)
-                        .build()
+                    val input = WorkerManager.orderPlaceWorkerBuyData(
+                        id,
+                        account.amountBuyAbove.toInt(),
+                        price
+                    )
                     val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                         .setInputData(input)
                         .addTag("account_id_$id")
@@ -81,9 +70,7 @@ class AutomationWorker(
                     WorkManager.getInstance(applicationContext).enqueue(request)
                 } else {
                     if (account.available.toFloat() < account.amountBuyBelow.toFloat()) {
-                        val inputData = Data.Builder()
-                            .putInt(AutomationWorker.AUTOMATION_ACCOUNT_ID, id)
-                            .build()
+                        val inputData = WorkerManager.automationWorkerData(id)
                         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
                             .setInputData(inputData)
                             .setInitialDelay(1L, TimeUnit.HOURS)
@@ -93,12 +80,11 @@ class AutomationWorker(
                         return Result.success()
                     }
                     // buy amountBelow
-                    val input = Data.Builder()
-                        .putInt(OrderPlaceWorker.ORDER_TYPE, OrderPlaceWorker.TYPE_BUY)
-                        .putInt(OrderPlaceWorker.ORDER_AMOUNT, account.amountBuyBelow.toInt())
-                        .putInt(OrderPlaceWorker.ORDER_ACCOUNT_ID, id)
-                        .putFloat(OrderPlaceWorker.ORDER_PRICE, price)
-                        .build()
+                    val input = WorkerManager.orderPlaceWorkerBuyData(
+                        id,
+                        account.amountBuyBelow.toInt(),
+                        price
+                    )
                     val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                         .setInputData(input)
                         .addTag("account_id_$id")

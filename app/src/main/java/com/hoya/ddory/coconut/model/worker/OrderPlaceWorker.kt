@@ -3,7 +3,6 @@ package com.hoya.ddory.coconut.model.worker
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -36,12 +35,7 @@ class OrderPlaceWorker(
             bithumbModel.buyKtor("XRP", price.toString(), units.toFloat())
                 .apply {
                     val requester = OneTimeWorkRequestBuilder<UserTransactionWorker>()
-                        .setInputData(
-                            Data.Builder()
-                                .putString(UserTransactionWorker.USER_TRANSACTION_ID, order_id)
-                                .putInt(UserTransactionWorker.USER_TRANSACTION_ACCOUNT_ID, id)
-                                .build()
-                        )
+                        .setInputData(WorkerManager.userTransactionWorkerData(id, order_id))
                         .setInitialDelay(1L, TimeUnit.MINUTES)
                         .addTag("account_id_$id")
                         .build()
@@ -53,12 +47,7 @@ class OrderPlaceWorker(
             bithumbModel.sellKtor("XRP", price.toString(), account.quantity.toFloat())
                 .apply {
                     val requester = OneTimeWorkRequestBuilder<UserTransactionWorker>()
-                        .setInputData(
-                            Data.Builder()
-                                .putString(UserTransactionWorker.USER_TRANSACTION_ID, order_id)
-                                .putInt(UserTransactionWorker.USER_TRANSACTION_ACCOUNT_ID, id)
-                                .build()
-                        )
+                        .setInputData(WorkerManager.userTransactionWorkerData(id, order_id))
                         .setInitialDelay(1L, TimeUnit.MINUTES)
                         .addTag("account_id_$id")
                         .build()

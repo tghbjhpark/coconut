@@ -3,7 +3,6 @@ package com.hoya.ddory.coconut.model.worker
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -26,10 +25,7 @@ class UserTransactionWorker(
             .apply {
                 if (data.order_status != "Completed" && count < 10) {
                     val requester = OneTimeWorkRequestBuilder<UserTransactionWorker>()
-                        .setInputData(Data.Builder()
-                            .putString(USER_TRANSACTION_ID, id)
-                            .putInt(USER_TRANSACTION_COUNT, count + 1)
-                            .build())
+                        .setInputData(WorkerManager.userTransactionWorkerData(accountId, id, count + 1))
                         .setInitialDelay(1L, TimeUnit.MINUTES)
                         .addTag("account_id_$id")
                         .build()
@@ -65,9 +61,7 @@ class UserTransactionWorker(
                         }
                         database.updateAccount(accountInfo)
 
-                        val inputData = Data.Builder()
-                            .putInt(AutomationWorker.AUTOMATION_ACCOUNT_ID, accountId)
-                            .build()
+                        val inputData = WorkerManager.automationWorkerData(accountId)
                         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
                             .setInputData(inputData)
                             .setInitialDelay(1L, TimeUnit.HOURS)
