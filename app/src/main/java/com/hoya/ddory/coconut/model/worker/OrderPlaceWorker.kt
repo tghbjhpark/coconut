@@ -43,6 +43,7 @@ class OrderPlaceWorker(
                                 .build()
                         )
                         .setInitialDelay(1L, TimeUnit.MINUTES)
+                        .addTag("account_id_$id")
                         .build()
                     WorkManager.getInstance(applicationContext).enqueue(requester)
                 }
@@ -59,6 +60,7 @@ class OrderPlaceWorker(
                                 .build()
                         )
                         .setInitialDelay(1L, TimeUnit.MINUTES)
+                        .addTag("account_id_$id")
                         .build()
                     WorkManager.getInstance(applicationContext).enqueue(requester)
                 }

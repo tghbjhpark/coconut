@@ -31,6 +31,7 @@ class UserTransactionWorker(
                             .putInt(USER_TRANSACTION_COUNT, count + 1)
                             .build())
                         .setInitialDelay(1L, TimeUnit.MINUTES)
+                        .addTag("account_id_$id")
                         .build()
                     WorkManager.getInstance(applicationContext).enqueue(requester)
                 } else {
@@ -70,6 +71,7 @@ class UserTransactionWorker(
                         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
                             .setInputData(inputData)
                             .setInitialDelay(1L, TimeUnit.HOURS)
+                            .addTag("account_id_$id")
                             .build()
                         WorkManager.getInstance(applicationContext).enqueue(requester)
                     }

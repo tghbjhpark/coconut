@@ -36,6 +36,7 @@ class AutomationWorker(
                 .build()
             val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                 .setInputData(input)
+                .addTag("account_id_$id")
                 .build()
             WorkManager.getInstance(applicationContext).enqueue(request)
         } else {
@@ -48,6 +49,7 @@ class AutomationWorker(
                     .build()
                 val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                     .setInputData(input)
+                    .addTag("account_id_$id")
                     .build()
                 WorkManager.getInstance(applicationContext).enqueue(request)
             } else {
@@ -59,6 +61,7 @@ class AutomationWorker(
                             .build()
                         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
                             .setInputData(inputData)
+                            .addTag("account_id_$id")
                             .setInitialDelay(1L, TimeUnit.HOURS)
                             .build()
                         WorkManager.getInstance(applicationContext).enqueue(requester)
@@ -73,6 +76,7 @@ class AutomationWorker(
                         .build()
                     val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                         .setInputData(input)
+                        .addTag("account_id_$id")
                         .build()
                     WorkManager.getInstance(applicationContext).enqueue(request)
                 } else {
@@ -83,6 +87,7 @@ class AutomationWorker(
                         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
                             .setInputData(inputData)
                             .setInitialDelay(1L, TimeUnit.HOURS)
+                            .addTag("account_id_$id")
                             .build()
                         WorkManager.getInstance(applicationContext).enqueue(requester)
                         return Result.success()
@@ -96,6 +101,7 @@ class AutomationWorker(
                         .build()
                     val request = OneTimeWorkRequestBuilder<OrderPlaceWorker>()
                         .setInputData(input)
+                        .addTag("account_id_$id")
                         .build()
                     WorkManager.getInstance(applicationContext).enqueue(request)
                 }
@@ -103,7 +109,6 @@ class AutomationWorker(
         }
 
         return Result.success()
-
     }
 
     companion object {

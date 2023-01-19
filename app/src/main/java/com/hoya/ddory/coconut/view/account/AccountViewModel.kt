@@ -46,6 +46,7 @@ class AccountViewModel : ViewModel() {
             .build()
         val requester = OneTimeWorkRequestBuilder<AutomationWorker>()
             .setInputData(inputData)
+            .addTag("account_id_$id")
             .build()
         WorkManager.getInstance(context).enqueue(requester)
     }
