@@ -27,19 +27,17 @@ class BithumbClient(context: Context) {
             serializer = KotlinxSerializer(json)
         }
         install(Logging) {
-            logger = object: Logger {
+            logger = object : Logger {
                 override fun log(message: String) {
                     Log.i("KtorClient", message)
-                    runBlocking {
-                       message.takeIf {
-                           it.startsWith("REQUEST:") ||
-                                   it.startsWith("RESPONSE:") ||
-                                   it.startsWith("FROM:") ||
-                                   it.startsWith("{") ||
-                                   it.startsWith("endpoint")
-                       }?.also {
-                           log.http("BithumbClient", it)
-                       }
+                    message.takeIf {
+                        it.startsWith("REQUEST:") ||
+                                it.startsWith("RESPONSE:") ||
+                                it.startsWith("FROM:") ||
+                                it.startsWith("{") ||
+                                it.startsWith("endpoint")
+                    }?.also {
+                        log.http("BithumbClient", it)
                     }
                 }
             }
