@@ -8,6 +8,7 @@ import com.hoya.ddory.coconut.cloud.response.OrderResult
 import com.hoya.ddory.coconut.cloud.response.Order
 import com.hoya.ddory.coconut.cloud.response.Account
 import com.hoya.ddory.coconut.cloud.response.TransactionHistory
+import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -16,6 +17,10 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 class BithumbModel(context: Context) {
+
+    private val bithumbClient: HttpClient by lazy {
+        BithumbClient(context).httpClient
+    }
 
     private val apiKey: String by lazy {
         readAssets(context, "api_key")
@@ -35,8 +40,7 @@ class BithumbModel(context: Context) {
 
     // Public API
     suspend fun getTransactionHistory(orderCurrency: String): TransactionHistory {
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com/public/transaction_history/${orderCurrency}_KRW?count=1") {
                 method = HttpMethod.Get
             }
@@ -48,8 +52,7 @@ class BithumbModel(context: Context) {
             Pair("order_currency", orderCurrency)
         )
         val headers = makeHeader(INFO_ACCOUNT_URL, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$INFO_ACCOUNT_URL") {
                 method = HttpMethod.Post
                 headers {
@@ -71,8 +74,7 @@ class BithumbModel(context: Context) {
             Pair("currency", currency)
         )
         val headers = makeHeader(INFO_BALANCE_URL, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$INFO_BALANCE_URL") {
                 method = HttpMethod.Post
                 headers {
@@ -100,8 +102,7 @@ class BithumbModel(context: Context) {
             Pair("payment_currency", paymentCurrency)
         )
         val headers = makeHeader(INFO_ORDERS_URL, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$INFO_ORDERS_URL") {
                 method = HttpMethod.Post
                 headers {
@@ -125,8 +126,7 @@ class BithumbModel(context: Context) {
             Pair("payment_currency", "KRW")
         )
         val headers = makeHeader(TRADE_BUY_URL, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$TRADE_BUY_URL") {
                 method = HttpMethod.Post
                 headers {
@@ -152,8 +152,7 @@ class BithumbModel(context: Context) {
             Pair("payment_currency", "KRW")
         )
         val headers = makeHeader(TRADE_PLACE, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$TRADE_PLACE") {
                 method = HttpMethod.Post
                 headers {
@@ -177,8 +176,7 @@ class BithumbModel(context: Context) {
             Pair("payment_currency", "KRW")
         )
         val headers = makeHeader(TRADE_SELL_URL, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$TRADE_SELL_URL") {
                 method = HttpMethod.Post
                 headers {
@@ -204,8 +202,7 @@ class BithumbModel(context: Context) {
             Pair("payment_currency", "KRW")
         )
         val headers = makeHeader(TRADE_PLACE, params)
-        return BithumbClient()
-            .httpClient
+        return bithumbClient
             .request("https://api.bithumb.com$TRADE_PLACE") {
                 method = HttpMethod.Post
                 headers {
